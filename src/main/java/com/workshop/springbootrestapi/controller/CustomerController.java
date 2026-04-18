@@ -1,50 +1,50 @@
 package com.workshop.springbootrestapi.controller;
 
 import com.workshop.springbootrestapi.model.Customer;
+import com.workshop.springbootrestapi.service.CustomerService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/customers")
 public class CustomerController {
 
-    private final List<Customer> customers = new ArrayList<>();
+    private final CustomerService customerService;
 
+    public CustomerController(CustomerService customerService) {
+        this.customerService = customerService;
+    }
+
+    // CREATE
     @PostMapping
     public Customer create(@Valid @RequestBody Customer customer) {
-        customers.add(customer);
-        return customer;
+        return customerService.addCustomer(customer);
     }
 
+    // GET ALL
     @GetMapping
     public List<Customer> getAll() {
-        return customers;
+        return customerService.getAllCustomers();
     }
 
+    // GET BY EMAIL
     @GetMapping("/{email}")
     public Customer getByEmail(@PathVariable String email) {
-        return customers.stream()
-                .filter(c -> c.getEmail().equalsIgnoreCase(email))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
+        return customerService.getCustomerByEmail(email);
     }
 
+    // UPDATE
     @PutMapping("/{email}")
-    public Customer update(@PathVariable String email, @RequestBody Customer updated) {
-        Customer customer = getByEmail(email);
-
-        customer.setName(updated.getName());
-        customer.setAge(updated.getAge());
-        customer.setAddress(updated.getAddress());
-
-        return customer;
+    public Customer update(@PathVariable String email,
+                           @RequestBody Customer customer) {
+        return customerService.updateCustomer(email, customer);
     }
 
+    // DELETE
     @DeleteMapping("/{email}")
     public void delete(@PathVariable String email) {
-        customers.removeIf(c -> c.getEmail().equalsIgnoreCase(email));
+        customerService.deleteCustomer(email);
     }
 }
