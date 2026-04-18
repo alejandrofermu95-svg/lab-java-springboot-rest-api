@@ -26,7 +26,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(
+    public ResponseEntity<Product> create(
             @RequestHeader("API-Key") String apiKey,
             @Valid @RequestBody Product product) {
 
@@ -35,34 +35,55 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<Product> getAll() {
+    public List<Product> getAll(@RequestHeader("API-Key") String apiKey) {
+        validateApiKey(apiKey);
         return productService.getAllProducts();
     }
 
     @GetMapping("/{name}")
-    public Product getByName(@PathVariable String name) {
+    public Product getByName(
+            @RequestHeader("API-Key") String apiKey,
+            @PathVariable String name) {
+
+        validateApiKey(apiKey);
         return productService.getProductByName(name);
     }
 
     @PutMapping("/{name}")
-    public Product update(@PathVariable String name, @RequestBody Product product) {
+    public Product update(
+            @RequestHeader("API-Key") String apiKey,
+            @PathVariable String name,
+            @RequestBody Product product) {
+
+        validateApiKey(apiKey);
         return productService.updateProduct(name, product);
     }
 
     @DeleteMapping("/{name}")
-    public void delete(@PathVariable String name) {
+    public void delete(
+            @RequestHeader("API-Key") String apiKey,
+            @PathVariable String name) {
+
+        validateApiKey(apiKey);
         productService.deleteProduct(name);
     }
 
     @GetMapping("/category/{category}")
-    public List<Product> getByCategory(@PathVariable String category) {
+    public List<Product> getByCategory(
+            @RequestHeader("API-Key") String apiKey,
+            @PathVariable String category) {
+
+        validateApiKey(apiKey);
         return productService.getProductsByCategory(category);
     }
 
     @GetMapping("/price")
     public List<Product> getByPriceRange(
+            @RequestHeader("API-Key") String apiKey,
             @RequestParam double min,
             @RequestParam double max) {
+
+        validateApiKey(apiKey);
         return productService.getProductsByPriceRange(min, max);
     }
 }

@@ -2,12 +2,14 @@ package com.workshop.springbootrestapi.model;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
 
 public class Product {
 
     @NotBlank(message = "Name cannot be blank")
+    @Size(min = 3, message = "Name must be at least 3 characters")
     private String name;
 
     @Positive(message = "Price must be positive")
@@ -27,6 +29,7 @@ public class Product {
         this.category = category;
         this.quantity = quantity;
     }
+
 
     public String getName() {
         return name;

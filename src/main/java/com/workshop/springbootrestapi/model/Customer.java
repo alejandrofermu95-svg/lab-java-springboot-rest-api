@@ -18,7 +18,6 @@ public class Customer {
     @NotBlank(message = "Address cannot be blank")
     private String address;
 
-    public Customer() {}
 
     public Customer(String name, String email, int age, String address) {
         this.name = name;
